@@ -1,0 +1,60 @@
+﻿175. Combine Two Tables
+Solution 
+select p.firstname, p.lastname, d.city, d.state
+from person p
+left join address d
+on p.personId = d.personId
+
+
+176. Second Highest Salary
+SELECT MAX(Salary) AS SecondHighestSalary
+FROM Employee
+WHERE Salary < (SELECT MAX(Salary) FROM Employee)
+
+
+181. Employees Earning More Than Their Managers
+Select a.name as employee
+from employee as a, employee as b 
+where a.managerid = b.id and a.salary > b. salary
+
+
+182. Duplicate Emails
+Select Email 
+from person
+Group by Email
+having count(Email) > 1
+
+
+183. Customers Who Never Order
+select c.name as Customers
+from customers c
+left join orders o 
+on c.id= o.customerId
+where o.customerId is null
+511. Game Play Analysis I
+select Player_id, min(event_date) as first_login
+from activity 
+group by player_id 
+
+
+577. Employee Bonus
+# Write your MySQL query statement below
+select name, bonus
+from Employee
+left join Bonus 
+on Employee.empID= Bonus.empID
+where bonus < 1000 or bonus is null
+
+
+586. Customer Placing the Largest Number of Orders
+select customer_number from 
+(select customer_number, count(customer_number) as cnt from orders 
+group by customer_number order by cnt desc) as t limit 1;
+
+
+596. Classes More Than 5 Students
+# Write your MySQL query statement below
+Select class 
+from courses
+group by class 
+having count(distinct student)>= 5
