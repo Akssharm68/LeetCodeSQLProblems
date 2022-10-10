@@ -1,6 +1,166 @@
-﻿175. Combine Two Tables
+175. Combine Two Tables
 Solution 
 select p.firstname, p.lastname, d.city, d.state
 from person p
 left join address d
 on p.personId = d.personId
+
+176. Second Highest Salary
+SELECT MAX(Salary) AS SecondHighestSalary
+FROM Employee
+WHERE Salary < (SELECT MAX(Salary) FROM Employee)
+
+181. Employees Earning More Than Their Managers
+Select a.name as employee
+from employee as a, employee as b 
+where a.managerid = b.id and a.salary > b. salary
+
+182. Duplicate Emails
+Select Email 
+from person
+Group by Email
+having count(Email) > 1
+
+183. Customers Who Never Order
+select c.name as Customers
+from customers c
+left join orders o 
+on c.id= o.customerId
+where o.customerId is null
+511. Game Play Analysis I
+select Player_id, min(event_date) as first_login
+from activity 
+group by player_id 
+
+577. Employee Bonus
+# Write your MySQL query statement below
+select name, bonus
+from Employee
+left join Bonus 
+on Employee.empID= Bonus.empID
+where bonus < 1000 or bonus is null
+
+586. Customer Placing the Largest Number of Orders
+select customer_number from 
+(select customer_number, count(customer_number) as cnt from orders 
+group by customer_number order by cnt desc) as t limit 1;
+
+596. Classes More Than 5 Students
+# Write your MySQL query statement below
+Select class 
+from courses
+group by class 
+having count(distinct student)>= 5
+
+597. Friend Requests I: Overall Acceptance Rate
+SELECT
+ROUND(
+    IFNULL(
+    (SELECT COUNT(*) FROM (SELECT DISTINCT requester_id, accepter_id FROM RequestAccepted) AS A)
+    /
+    (SELECT COUNT(*) FROM (SELECT DISTINCT sender_id, send_to_id FROM FriendRequest) AS B),
+    0)
+, 2) AS accept_rate;
+
+
+197. Rising Temperature (DATEDIFF)
+SELECT
+    weather.id AS 'Id'
+FROM
+    weather
+        JOIN
+    weather w ON DATEDIFF(weather.recordDate, w.recordDate) = 1
+        AND weather.Temperature > w.Temperature
+
+175. Combine Two Tables
+select p.firstname, p.lastname, a.city, a.state 
+from person p
+left join address a 
+on p.personid = a.personid
+
+
+181. Employees Earning More Than Their Managers
+SELECT
+    a.Name AS 'Employee'
+FROM
+    Employee AS a,
+    Employee AS b
+WHERE
+    a.ManagerId = b.Id
+        AND a.Salary > b.Salary
+;
+
+603. Consecutive Available Seats
+select distinct a.seat_id
+from cinema a join cinema b
+  on abs(a.seat_id - b.seat_id) = 1
+  and a.free = true and b.free = true
+order by a.seat_id
+
+
+607. Sales Person
+SELECT
+    s.name
+FROM
+    salesperson s
+WHERE
+    s.sales_id NOT IN (SELECT
+            o.sales_id
+        FROM
+            orders o
+                LEFT JOIN
+            company c ON o.com_id = c.com_id
+        WHERE
+            c.name = 'RED')
+610. Triangle Judgement
+SELECT 
+    x,
+    y,
+    z,
+    CASE
+        WHEN x + y > z AND x + z > y AND y + z > x THEN 'Yes'
+        ELSE 'No'
+    END AS 'triangle'
+FROM
+    triangle
+
+512. Game Play Analysis II
+select distinct
+player_id
+, first_value(device_id) Over(partition by player_id order by event_date asc) device_id
+From Activity
+
+613. Shortest Distance in a Line
+SELECT
+    MIN(ABS(p1.x - p2.x)) AS shortest
+FROM
+    point p1
+        JOIN
+    point p2 ON p1.x != p2.x
+
+620. Not Boring Movies
+select *
+from cinema
+where mod(id, 2) = 1 and description != 'boring'
+order by rating DESC
+
+
+1050. Actors and Directors Who Cooperated At Least Three Times
+select actor_id, director_id from 
+(select actor_id, director_id,count(*) as cnt from ActorDirector 
+group by actor_id, director_id 
+having cnt>=3) as tmp
+
+1068. Product Sales Analysis I
+SELECT DISTINCT 
+    P.product_name, S.year, S.price 
+FROM 
+    (SELECT DISTINCT product_id, year, price FROM Sales) S
+INNER JOIN
+    Product AS P
+USING (product_id)
+
+1069. Product Sales Analysis II
+SELECT product_id, SUM(quantity) AS total_quantity
+FROM Sales
+GROUP BY product_id
